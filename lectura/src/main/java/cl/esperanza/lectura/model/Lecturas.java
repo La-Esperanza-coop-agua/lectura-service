@@ -1,8 +1,7 @@
 package cl.esperanza.lectura.model;
 
+import java.time.LocalDate;
 
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,11 +13,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Table(name = "lecturas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 
 public class Lecturas {
     
@@ -26,6 +24,14 @@ public class Lecturas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private int socioId;
 
+    private double lecturaAnterior;
+
+    private double lecturaActual;
+
+    private double consumoMensual;
+
+    private LocalDate fechaLectura;
 
 }
