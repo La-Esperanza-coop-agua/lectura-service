@@ -34,4 +34,6 @@ public class Lecturas {
 
     private LocalDate fechaLectura;
 
+
+    
 }
