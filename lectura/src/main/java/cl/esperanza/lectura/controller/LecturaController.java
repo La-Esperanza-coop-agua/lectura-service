@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import cl.esperanza.lectura.dto.LecturaDTO;
 import cl.esperanza.lectura.model.Lecturas;
 import cl.esperanza.lectura.service.LecturaService;
 
@@ -16,7 +17,6 @@ public class LecturaController {
     @Autowired
     private LecturaService service;
 
-
     @GetMapping
     public List<Lecturas> listar() {
         return service.obtenerLecturas();
@@ -24,8 +24,8 @@ public class LecturaController {
 
     @PostMapping
     public Lecturas guardar(
-            @RequestBody Lecturas lectura) {
+            @RequestBody LecturaDTO dto) {
 
-        return service.guardarLectura(lectura);
+        return service.guardarLectura(dto);
     }
 }
