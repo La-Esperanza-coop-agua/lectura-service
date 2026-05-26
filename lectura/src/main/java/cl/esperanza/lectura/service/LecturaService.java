@@ -2,11 +2,12 @@ package cl.esperanza.lectura.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import cl.esperanza.lectura.dto.LecturaDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cl.esperanza.lectura.dto.LecturaDTO;
+import cl.esperanza.lectura.exception.LecturaInvalidaException;
 import cl.esperanza.lectura.model.Lecturas;
 import cl.esperanza.lectura.repository.LecturaRepository;
 
@@ -24,28 +25,35 @@ public class LecturaService {
     // GUARDAR LECTURA
     public Lecturas guardarLectura(LecturaDTO dto) {
 
-    // CALCULO DEL CONSUMO
-    double consumo =
-            dto.getLecturaActual()
-          - dto.getLecturaAnterior();
+        // VALIDACION
+        if(dto.getLecturaActual()
+            < dto.getLecturaAnterior()) {
 
-    // CREAR OBJETO LECTURA
-    Lecturas lectura = new Lecturas();
+            throw new LecturaInvalidaException(
+                "La lectura actual no puede ser menor a la anterior");
+        }
 
-    // SETEAR DATOS
-    lectura.setSocioId(dto.getSocioId());
+        // CALCULO DEL CONSUMO
+        double consumo =
+                dto.getLecturaActual()
+              - dto.getLecturaAnterior();
 
-    lectura.setLecturaAnterior(
-            dto.getLecturaAnterior());
+        // CREAR OBJETO
+        Lecturas lectura = new Lecturas();
 
-    lectura.setLecturaActual(
-            dto.getLecturaActual());
+        lectura.setSocioId(dto.getSocioId());
 
-    lectura.setConsumoMensual(consumo);
+        lectura.setLecturaAnterior(
+                dto.getLecturaAnterior());
 
-    lectura.setFechaLectura(LocalDate.now());
+        lectura.setLecturaActual(
+                dto.getLecturaActual());
 
-    // GUARDAR EN BASE DE DATOS
-    return repository.save(lectura);
-}
+        lectura.setConsumoMensual(consumo);
+
+        lectura.setFechaLectura(LocalDate.now());
+
+        // GUARDAR EN BASE DE DATOS
+        return repository.save(lectura);
+    }
 }
