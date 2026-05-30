@@ -1,9 +1,11 @@
 package cl.esperanza.lectura.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import cl.esperanza.lectura.model.Lectura;
 import cl.esperanza.lectura.repository.LecturaRepository;
-import java.util.List;
 
 @Service
 public class LecturaService {
@@ -27,5 +29,10 @@ public class LecturaService {
     
     public List<Lectura> obtenerLecturasPorSocio(String run) {
         return lecturaRepository.findByRunSocio(run);
+    }
+
+    public Lectura obtenerLecturaExacta(String run, String periodo){
+        return lecturaRepository.findByRunSocioAndPeriodo(run, periodo)
+        .orElseThrow(() -> new RuntimeException("No se encontró una lectura para el socio "+ run +" en el periodo"+ periodo));
     }
 }
