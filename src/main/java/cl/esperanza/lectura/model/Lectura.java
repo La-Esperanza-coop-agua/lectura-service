@@ -1,5 +1,6 @@
 package cl.esperanza.lectura.model;
 
+import java.time.LocalDate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,14 +20,11 @@ public class Lectura {
     private String runSocio;
 
     @Column(nullable = false)
-    private String periodo;
+    private LocalDate fechaLectura;
 
     @Column(nullable = false)
-    private double lecturaAnteriorM3;
+    private double medidaActual;
 
     @Column(nullable = false)
-    private double lecturaActualM3;
-
-    @Column(nullable = false)
-    private double metrosCubicosConsumidos; 
+    private double consumoMensual;
 }

@@ -12,35 +12,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.esperanza.lectura.dto.CreateLecturaRequest;
+import cl.esperanza.lectura.mapper.LecturaMapper;
 import cl.esperanza.lectura.model.Lectura;
 import cl.esperanza.lectura.service.LecturaService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/lectura")
+@RequestMapping("/api/v1/lecturas")
 public class LecturaController {
     
     private final LecturaService lecturaService;
 
-    public LecturaController(LecturaService lecturaService) {
-        this.lecturaService = lecturaService;
+    public LecturaController(LecturaService lecServ){
+        this.lecturaService = lecServ;
     }
 
-    @GetMapping("/socio/{run}")
-    public ResponseEntity<List<Lectura>> getLecturasPorSocio(@PathVariable String run) {
-        return ResponseEntity.ok(lecturaService.obtenerLecturasPorSocio(run));
+    @GetMapping("/socio/{runSocio}")
+    public ResponseEntity<List<Lectura>> getLecturasPorSocio(@PathVariable String runSocio) {
+        List<Lectura> registros = lecturaService.obtenerPorSocio(runSocio);
+        return ResponseEntity.ok(registros);
     }
 
-    // Endpoint que usara el micro de facturacion
-    @GetMapping("/socio/{run}/periodo/{periodo}")
-    public ResponseEntity<Lectura> getLecturaPorPeriodo(@PathVariable String run, @PathVariable String periodo){
-        Lectura lectura = lecturaService.obtenerLecturaExacta(run, periodo);
-        return ResponseEntity.ok(lectura);
-    }
-
-    @PostMapping("/registrar")
-    public ResponseEntity<Lectura> registrarNuevaLectura(@Valid @RequestBody CreateLecturaRequest request) {
-        Lectura nuevaLectura = lecturaService.registrarLectura(request.toEntity());
+    @PostMapping
+    public ResponseEntity<Lectura> addLectura(@Valid @RequestBody CreateLecturaRequest request){
+        Lectura nuevaLectura = lecturaService.guardarLectura(LecturaMapper.toModel(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaLectura);
+    }
+
+    @GetMapping("/socio/{runSocio}/ultima")
+    public ResponseEntity<Lectura> getUltimaLectura(@PathVariable String runSocio) {
+        Lectura ultimaLectura = lecturaService.obtenerUltimaLectura(runSocio);
+        if (ultimaLectura == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ultimaLectura);
     }
 }

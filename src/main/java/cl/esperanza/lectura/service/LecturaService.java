@@ -2,37 +2,30 @@ package cl.esperanza.lectura.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.esperanza.lectura.model.Lectura;
 import cl.esperanza.lectura.repository.LecturaRepository;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class LecturaService {
 
-    private final LecturaRepository lecturaRepository;
+    @Autowired
+    private LecturaRepository lecturaRepo;
 
-    public LecturaService(LecturaRepository lecturaRepo) {
-        this.lecturaRepository = lecturaRepo;
+    public List<Lectura> obtenerPorSocio(String runSocio) {
+        return lecturaRepo.findByRunSocio(runSocio);
     }
 
-    public Lectura registrarLectura(Lectura lectura) {
-        if (lectura.getLecturaActualM3() < lectura.getLecturaAnteriorM3()) {
-            throw new IllegalArgumentException("La lectura actual no puede ser menor a la lectura anterior");
-        }
-
-        double totalConsumido = lectura.getLecturaActualM3() - lectura.getLecturaAnteriorM3();
-        lectura.setMetrosCubicosConsumidos(totalConsumido);
-
-        return lecturaRepository.save(lectura);
-    }
-    
-    public List<Lectura> obtenerLecturasPorSocio(String run) {
-        return lecturaRepository.findByRunSocio(run);
+    public Lectura guardarLectura(Lectura lectura) {
+        return lecturaRepo.save(lectura);
     }
 
-    public Lectura obtenerLecturaExacta(String run, String periodo){
-        return lecturaRepository.findByRunSocioAndPeriodo(run, periodo)
-        .orElseThrow(() -> new RuntimeException("No se encontró una lectura para el socio "+ run +" en el periodo"+ periodo));
+    public Lectura obtenerUltimaLectura(String runSocio) {
+        return lecturaRepo.findTopByRunSocioOrderByFechaLecturaDesc(runSocio)
+                .orElse(null); 
     }
 }
