@@ -16,15 +16,15 @@ public class Lectura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 13)
+    @Column(name= "run_socio", nullable = false, length = 13)
     private String runSocio;
 
-    @Column(nullable = false)
+    @Column(name = "fecha_lectura",nullable = false)
     private LocalDate fechaLectura;
 
-    @Column(nullable = false)
+    @Column(name = "medida_actual", nullable = false)
     private double medidaActual;
 
-    @Column(nullable = false)
+    @Column(name = "consumo_mensual",nullable = false)
     private double consumoMensual;
 }
