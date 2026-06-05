@@ -16,7 +16,7 @@ public class Lectura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name= "run_socio", nullable = false, length = 13)
+    @Column(name= "run_socio", nullable = false, length = 10)
     private String runSocio;
 
     @Column(name = "fecha_lectura",nullable = false)
