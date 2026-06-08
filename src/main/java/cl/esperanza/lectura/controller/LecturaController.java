@@ -32,7 +32,7 @@ public class LecturaController {
     public ResponseEntity<List<Lectura>> getLecturasPorSocio(@PathVariable String runSocio) {
         List<Lectura> registros = lecturaService.obtenerPorSocio(runSocio);
         if (registros.isEmpty()) {
-            throw new ResourceNotFoundException("No se encontraron lecturas registradas para el socio con RUN: " + runSocio);
+            throw new ResourceNotFoundException("No se encontraron lecturas registradas para el RUN del socio: " + runSocio);
         }
         return ResponseEntity.ok(registros);
     }
