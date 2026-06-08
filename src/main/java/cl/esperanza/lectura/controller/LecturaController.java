@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.esperanza.lectura.dto.CreateLecturaRequest;
+import cl.esperanza.lectura.exception.ResourceNotFoundException;
 import cl.esperanza.lectura.mapper.LecturaMapper;
 import cl.esperanza.lectura.model.Lectura;
 import cl.esperanza.lectura.service.LecturaService;
@@ -30,9 +31,11 @@ public class LecturaController {
     @GetMapping("/socio/{runSocio}")
     public ResponseEntity<List<Lectura>> getLecturasPorSocio(@PathVariable String runSocio) {
         List<Lectura> registros = lecturaService.obtenerPorSocio(runSocio);
+        if (registros.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron lecturas registradas para el socio con RUN: " + runSocio);
+        }
         return ResponseEntity.ok(registros);
     }
-
     @PostMapping
     public ResponseEntity<Lectura> addLectura(@Valid @RequestBody CreateLecturaRequest request){
         Lectura nuevaLectura = lecturaService.guardarLectura(LecturaMapper.toModel(request));
@@ -43,7 +46,7 @@ public class LecturaController {
     public ResponseEntity<Lectura> getUltimaLectura(@PathVariable String runSocio) {
         Lectura ultimaLectura = lecturaService.obtenerUltimaLectura(runSocio);
         if (ultimaLectura == null) {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("No se encontraron lecturas registradas con el RUN: " + runSocio);
         }
         return ResponseEntity.ok(ultimaLectura);
     }
