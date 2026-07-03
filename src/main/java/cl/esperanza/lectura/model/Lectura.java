@@ -19,12 +19,15 @@ public class Lectura {
     @Column(name= "run_socio", nullable = false, length = 10)
     private String runSocio;
 
-    @Column(name = "fecha_lectura",nullable = false)
+    @Column(name = "fecha_lectura", nullable = false)
     private LocalDate fechaLectura;
 
     @Column(name = "medida_actual", nullable = false)
     private double medidaActual;
 
-    @Column(name = "consumo_mensual",nullable = false)
+    @Column(name = "consumo_mensual", nullable = false)
     private double consumoMensual;
+
+    @Column(name = "periodo", nullable = false, length = 7)
+    private String periodo;
 }
